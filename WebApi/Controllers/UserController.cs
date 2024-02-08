@@ -17,9 +17,9 @@ namespace WebApi.Controllers
     {
         private readonly IStringCryptorDecryptor _stringCryptorDecryptor;
         private readonly IMapper _mapper;
-        private IUserService _userService;
-        private IRoleService _roleService;
-        private ICustomerService _customerService;
+        private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
+        private readonly ICustomerService _customerService;
 
         public UserController(IMapper mapper, IUserService  userService,ICustomerService customerService, IStringCryptorDecryptor stringCryptorDecryptor, IRoleService roleService)
         {
