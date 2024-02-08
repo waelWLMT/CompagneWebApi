@@ -13,7 +13,7 @@ namespace Root
 {
     public class CompositionRoot
     {
-        public CompositionRoot() { }
+        protected CompositionRoot() { }
 
         public static void InjectDependencies(IServiceCollection services,  string connectionString)
         {
@@ -66,7 +66,7 @@ namespace Root
 
             #endregion
 
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         }
     }
