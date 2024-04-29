@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using Root;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,9 @@ namespace WebApi
             services.AddAuthentication(
             CertificateAuthenticationDefaults.AuthenticationScheme)
             .AddCertificate();
-            */      
+            */
+
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -62,6 +65,7 @@ namespace WebApi
             services.AddScoped<IStringCryptorDecryptor, StringCryptorDecryptor>();
 
             services.AddSwaggerGen();
+            
 
         }
 
@@ -69,13 +73,13 @@ namespace WebApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
+            {                
+                //app.UseDeveloperExceptionPage();
             }
 
             app.UseAuthentication();
-            app.UseCors("AllowAll");
-            app.UseHttpsRedirection();
+            app.UseCors("AllowAll");            
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
 
