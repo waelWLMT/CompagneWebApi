@@ -15,6 +15,8 @@ namespace WebApi.Dtos
         public bool Activated { get; set; }
         public int RoleId { get; set; }
         public int ClientId { get; set; }
+        public string Login { get; set; }
         public string Password { get; set; }
+        
     }
 }

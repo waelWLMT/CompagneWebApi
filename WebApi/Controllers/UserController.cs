@@ -55,8 +55,8 @@ namespace WebApi.Controllers
         public UserReadDto AddUser(UserCreateDto userCreateDto)
         {
             var userModel = _mapper.Map<User>(userCreateDto);
-
             userModel.CryptedPassword = _stringCryptorDecryptor.EncryptString(userCreateDto.Password);
+            userModel.Activated = true;
 
             _userService.Insert(userModel);
             _userService.Commit();
