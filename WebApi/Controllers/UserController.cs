@@ -58,11 +58,16 @@ namespace WebApi.Controllers
             userModel.CryptedPassword = _stringCryptorDecryptor.EncryptString(userCreateDto.Password);
             userModel.Activated = true;
 
-            _userService.Insert(userModel);
-            _userService.Commit();
-            var userReadDto = _mapper.Map<UserReadDto>(userModel);
+            if(_userService.InsertUser(userModel))
+            {
+                _userService.Commit();
+                var userReadDto = _mapper.Map<UserReadDto>(userModel);
 
-            return userReadDto;
+                return userReadDto;
+            }
+
+            return null;
+
         }
                 
         [HttpGet]

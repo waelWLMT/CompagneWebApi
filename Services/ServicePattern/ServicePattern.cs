@@ -41,7 +41,7 @@ namespace BL.ServicePattern
         }
 
         public void Insert(T entity)
-        {
+        {            
             _repo.Insert(entity);
         }
 

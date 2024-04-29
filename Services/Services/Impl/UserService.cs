@@ -28,5 +28,20 @@ namespace BL.Services.Impl
             var user = _userRepo.GetUserByUserName(login);
             return user;
         }
+    
+        public bool InsertUser(User user)
+        {
+            var entity = GetUserByUserName(user.Login);
+            
+            if(entity == null)
+            {
+                base.Insert(user);
+                return true;
+            }       
+
+            return false;
+                
+        }
+    
     }
 }

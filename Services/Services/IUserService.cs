@@ -11,5 +11,6 @@ namespace BL.Services
         void DesactivateUser(int userId, bool activate);
 
         User GetUserByUserName(string login);
+        bool InsertUser(User user);
     }
 }
