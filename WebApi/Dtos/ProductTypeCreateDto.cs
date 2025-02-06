@@ -9,8 +9,7 @@ namespace WebApi.Dtos
     {
         public string Name { get; set; }
         public float Price { get; set; }
-        public SizeDto Size { get; set; }
-        public string Color { get; set; }
+        public SizeDto Size { get; set; }        
         public string Description { get; set; }
         public int DefaultNbrProductPerBusiness { get; set; }
         
