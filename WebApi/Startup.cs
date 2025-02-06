@@ -54,6 +54,7 @@ namespace WebApi
             });
 
             CompositionRoot.InjectDependencies(services, Configuration.GetConnectionString("Cnx"));
+            services.AddScoped<IReportService, ReportService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
             services.AddControllers().AddNewtonsoftJson();
            
@@ -94,7 +95,7 @@ namespace WebApi
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test1 Api v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CompagnePub WebApi v1");
             });
 
 
