@@ -5,6 +5,7 @@ using Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using WebApi.Dtos;
 
@@ -13,13 +14,11 @@ namespace WebApi.Helpers
 {
     public class ReportService : IReportService
     {
-        private readonly IRoleRepository _roleRepository;
-        private readonly IQuoteRepository _quoteRepository;
+        private readonly IBillRepository _billRepository;        
 
-        public ReportService(IRoleRepository repository, IQuoteRepository quoteRepository)
-        {              
-            _roleRepository = repository;
-            _quoteRepository = quoteRepository;
+        public ReportService(IBillRepository repository)
+        {
+            _billRepository = repository;            
         }
 
         private Dictionary<string,string> getDevisParams()
@@ -35,8 +34,10 @@ namespace WebApi.Helpers
 
         }
 
-        private void setDevisDataSets(LocalReport devisReport)
+        private void setFactureDataSet(LocalReport devisReport)
         {
+            var bills = _billRepository.GetAll().Take(1);
+            devisReport.AddDataSource("Factures", bills);
 
         }
 
@@ -49,18 +50,9 @@ namespace WebApi.Helpers
                 var extension = 1;
 
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                var devisReport = new LocalReport(pathRdlc);
-
-                var roles = _roleRepository.GetAll();                
-                var ligneDevis = roles;
-
+                var devisReport = new LocalReport(pathRdlc);                
                 var reportParams = getDevisParams();
-                
-                //setDevisDataSets(devisReport);
-                //devisReport.AddDataSource("DS1",ligneDevis);
-
-
-
+                setFactureDataSet(devisReport);                
                 var result = devisReport.Execute(RenderType.Pdf, extension, reportParams, mimeType);
 
                 return result.MainStream;

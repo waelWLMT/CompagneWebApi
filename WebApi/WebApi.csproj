@@ -36,6 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="CompagnPubDB_DevDataSet.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CompagnPubDB_DevDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Update="DsRoles.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -44,6 +49,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="CompagnPubDB_DevDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CompagnPubDB_DevDataSet.Designer.cs</LastGenOutput>
+    </None>
     <None Update="DsRoles.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DsRoles.Designer.cs</LastGenOutput>
