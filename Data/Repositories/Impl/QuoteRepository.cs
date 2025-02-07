@@ -19,6 +19,7 @@ namespace Data.Repositories.Impl
 
         public Quote GetQuoteFullDataById(int devisId)
         {
+
             var quote = base.Entities.Where(x => x.Id == devisId)
                 .Include(x => x.BusinessTypeQuoteLines)
                 .Include(x => x.ProductQuoteLines)

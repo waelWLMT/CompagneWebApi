@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using AspNetCore.ReportingServices.ReportProcessing.ExprHostObjectModel;
+using AutoMapper;
 using BL.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -7,10 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Dtos;
+using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class QuoteController : ControllerBase
@@ -19,13 +22,17 @@ namespace WebApi.Controllers
         private readonly ICampaignService _campaignService;
         private readonly IBillService _billService;
         private readonly IMapper _mapper;
+        private readonly IHostingEnvironment _hostingEnvironment;
+        private IReportService _reportService;
 
-        public QuoteController(IQuoteService quoteService, ICampaignService campaignService, IBillService billService, IMapper mapper)
+        public QuoteController(IQuoteService quoteService, ICampaignService campaignService, IBillService billService, IMapper mapper, IHostingEnvironment hostingEnvironment, IReportService reportService)
         {
             this._quoteService = quoteService;
             this._campaignService = campaignService;
             this._billService = billService;
             this._mapper = mapper;
+            this._hostingEnvironment = hostingEnvironment;
+            this._reportService = reportService;
         }
 
         [HttpGet]
@@ -36,6 +43,19 @@ namespace WebApi.Controllers
             var result = _mapper.Map<List<QuoteReadDto>>(quotes);
 
             return result;
+        }
+       
+        [HttpGet]
+        [Route("GetReportById")]
+        public object GetDevisReport()
+        {
+            
+            var path = _hostingEnvironment.ContentRootPath + "\\Reports\\Report.rdlc";
+            var byteRes = _reportService.CreateReportFile(path);
+
+
+            return File(byteRes, System.Net.Mime.MediaTypeNames.Application.Octet, "ReportName.pdf");
+
         }
 
         [HttpGet]
