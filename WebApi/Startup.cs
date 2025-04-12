@@ -53,6 +53,9 @@ namespace WebApi
                     });
             });
 
+            services.AddHttpClient();
+            
+
             CompositionRoot.InjectDependencies(services, Configuration.GetConnectionString("Cnx"));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
             services.AddControllers().AddNewtonsoftJson();

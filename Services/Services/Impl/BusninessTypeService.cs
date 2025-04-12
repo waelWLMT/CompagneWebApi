@@ -13,12 +13,14 @@ namespace BL.Services.Impl
     public class BusninessTypeService : ServicePattern<BusinessType>, IBusninessTypeService
     {
         private readonly IBusninessTypeRepository _businessTypeRepo;
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public BusninessTypeService(IBusninessTypeRepository businessTypeRepo, HttpClient httpClient): base(businessTypeRepo) 
+        //private readonly IHttpClientFactory _httpClientFactory;
+
+        public BusninessTypeService(IBusninessTypeRepository businessTypeRepo, IHttpClientFactory httpClientFactory): base(businessTypeRepo) 
         {
             this._businessTypeRepo = businessTypeRepo;
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
 
         }
 
@@ -31,7 +33,8 @@ namespace BL.Services.Impl
         {
 
             var baseUrl = "testApiUrl";
-            var response = await _httpClient.GetAsync(baseUrl);
+            var httpClient = _httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(baseUrl);
 
             if (response.IsSuccessStatusCode)
             {
@@ -49,6 +52,11 @@ namespace BL.Services.Impl
 
 
             return null;
+        }
+
+        ICollection<BusinessType> IBusninessTypeService.GetByPostalCodesAndType(List<string> postalCodes, string mapCode)
+        {
+            throw new NotImplementedException();
         }
     }
 }
