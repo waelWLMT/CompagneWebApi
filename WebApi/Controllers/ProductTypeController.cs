@@ -17,11 +17,20 @@ namespace WebApi.Controllers
     public class ProductTypeController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private IProductTypeService _productTypeService;
+        private readonly IProductTypeService _productTypeService;
         public ProductTypeController(IMapper mapper, IProductTypeService productTypeService)
         {
             _mapper = mapper;
             _productTypeService = productTypeService;
+        }
+
+
+        [HttpDelete]
+        [Route("activate")]
+        public bool ActivateProductTypeById(int id, bool activate)
+        {
+            var done = _productTypeService.ActivateProductType(id, activate);
+            return done;
         }
 
         [HttpPost]

@@ -11,6 +11,7 @@ namespace Core.Models
         public float Price { get; set; }
         public Size Size { get; set; }
         public string Description { get; set; }
+        public bool Activated { get; set; }
         public int DefaultNbrProductPerBusiness { get; set; }
     }
 }

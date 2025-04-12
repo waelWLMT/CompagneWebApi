@@ -203,7 +203,7 @@ namespace WebApi.Controllers
             try
             {
                 var business = this._campaignService.UpdateCampaignBusinessState(campaignId, newStateId, userModifId, businessCampaignId);
-
+                                
                 if (business != null)
                 {                    
                     var formCollection = await Request.ReadFormAsync();

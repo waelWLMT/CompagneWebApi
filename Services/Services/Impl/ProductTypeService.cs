@@ -15,5 +15,15 @@ namespace BL.Services.Impl
         {
             _productTypeRepo = productTypeRepo;
         }
+
+        public bool ActivateProductType(int id, bool activate)
+        {
+            var product = _productTypeRepo.GetById(id);
+            product.Activated = activate;
+            Commit();
+
+            return true;
+            
+        }
     }
 }

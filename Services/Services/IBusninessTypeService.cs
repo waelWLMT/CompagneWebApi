@@ -9,5 +9,6 @@ namespace BL.Services
     public interface IBusninessTypeService : IServicePattern<BusinessType>
     {
         ICollection<BusinessType> GetActivatedBusinessTypes();
+        ICollection<BusinessType> GetByPostalCodesAndType(List<string> postalCodes, string mapCode);
     }
 }

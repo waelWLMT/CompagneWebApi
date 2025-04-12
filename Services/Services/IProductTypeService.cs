@@ -8,5 +8,6 @@ namespace BL.Services
 {
     public interface IProductTypeService : IServicePattern<ProductType> 
     {
+        bool ActivateProductType(int id, bool activate);
     }
 }

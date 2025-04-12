@@ -34,5 +34,18 @@ namespace WebApi.Controllers
 
             return result;
         }
+
+        [HttpPost]
+        [Route("GetBusinessTypesByPostalCodesAndMapCode")]
+        public List<BusinessTypeReadDto> GetBusinessTypesByPostalCodesAndMapCode(List<string> postalCodes, string mapCode)
+        {
+            var list = _businessTypeService.GetByPostalCodesAndType(postalCodes, mapCode);
+            var result = _mapper.Map<List<BusinessTypeReadDto>>(list);
+            return result;
+        }
+
+
+
+
     }
 }

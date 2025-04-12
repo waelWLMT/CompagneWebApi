@@ -13,6 +13,7 @@ namespace Core.Models
         public Address Address { get; set; }
         public string Mail { get; set; }
         public string TelNumber { get; set; }
+        public bool Activated { get; set; }
         public virtual ICollection<Campaign> Campaigns { get; set; }
     }
 }

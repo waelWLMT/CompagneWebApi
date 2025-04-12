@@ -12,6 +12,7 @@ namespace Data.Configurations
         public void Configure(EntityTypeBuilder<ProductType> builder)
         {
             builder.OwnsOne(x => x.Size);
+            builder.Property("Activated").HasDefaultValue(true);
         }
     }
 }

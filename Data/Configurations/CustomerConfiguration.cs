@@ -12,6 +12,7 @@ namespace Data.Configurations
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.OwnsOne(c => c.Address);
+            builder.Property("Activated").HasDefaultValue(true);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace WebApi.Dtos
         public int RoleId { get; set; }
         public int ClientId { get; set; }
         public string ClientName { get; set; }
+        public string Login { get; set; }
 
         [JsonIgnore]
         public string Password { get; set; }
