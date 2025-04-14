@@ -7,8 +7,11 @@ namespace Core.Models
     public class BusinessType : BaseEntity
     {        
         // properties
-        public string Code { get; set; }
         public string MapCode { get; set; }
+        public string Designation { get; set; }
+        public string GeoApiPlaceCode { get; set; }
+        public string GeoApiPlaceCategory { get; set; }
+        public string Description { get; set; }
         public bool Activated { get; set; }
 
         // navigation properties

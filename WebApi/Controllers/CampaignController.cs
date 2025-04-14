@@ -19,7 +19,7 @@ using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CampaignController : ControllerBase
@@ -29,14 +29,18 @@ namespace WebApi.Controllers
         private readonly IBillService _billService;
         public IFilesService _filesService { get; }
         private readonly IPhotoService _photoService;
+        private readonly IPlaceService _placeService;
 
-        public CampaignController(ICampaignService campaignService, IMapper mapper, IBillService billService, IFilesService filesService, IPhotoService photoService)
+        public CampaignController(ICampaignService campaignService, IMapper mapper, 
+            IBillService billService, IFilesService filesService, 
+            IPhotoService photoService, IPlaceService placeService)
         {
             _mapper = mapper;
             _campaignService = campaignService;
             _billService = billService;
             _filesService = filesService;
             _photoService = photoService;
+            _placeService = placeService;
         }
 
         #region Campaign Managment
@@ -203,22 +207,23 @@ namespace WebApi.Controllers
             try
             {
                 var business = this._campaignService.UpdateCampaignBusinessState(campaignId, newStateId, userModifId, businessCampaignId);
-                                
+
                 if (business != null)
-                {                    
+                {
                     var formCollection = await Request.ReadFormAsync();
                     var files = formCollection.Files;
-                    var path = _filesService.CreateCampaignBusinessFilesDirectoryIfNotExist(campaignId, business.CampaignBusinessId); 
+                    var path = _filesService.CreateCampaignBusinessFilesDirectoryIfNotExist(campaignId, business.CampaignBusinessId);
                     var listPhotoNames = _filesService.UploadListFiles(files.ToList(), path);
                     _photoService.AddListPhotos(business, listPhotoNames);
                 }
 
-                return Ok() ;
+                return Ok();
 
-            }catch(Exception)
+            }
+            catch (Exception)
             {
                 return StatusCode(500);
-            }            
+            }
         }
 
         [HttpDelete]
@@ -268,6 +273,15 @@ namespace WebApi.Controllers
 
         #endregion
 
-        
+
+        [HttpPost]
+        [Route("GetPlaceListByPostalCodesAndType")]
+        public async Task<List<Place>> GetPlaceListByPostalCodesAndType(SearchPlacesDto searchPlacesCreteria)
+        {
+            return await _placeService.GetPlacesList(searchPlacesCreteria.PostalCodes, searchPlacesCreteria.PlaceTypeKey, searchPlacesCreteria.PlaceTypeValue);
+        }
+
+
+
     }
 }

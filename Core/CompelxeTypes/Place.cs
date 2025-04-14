@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Core.CompelxeTypes;
 
 namespace Core.Models
 {
@@ -13,6 +14,9 @@ namespace Core.Models
         public string Name { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
+
+        [NotMapped]
+        public Address PlaceAdresse { get; set; }
 
         // business Types of specific place
         //public List<string> PlaceTypes { get; set; }

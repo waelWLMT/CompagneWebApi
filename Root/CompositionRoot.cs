@@ -15,7 +15,7 @@ namespace Root
     {
         protected CompositionRoot() { }
 
-        public static void InjectDependencies(IServiceCollection services,  string connectionString)
+        public static void InjectDependencies(IServiceCollection services, string connectionString)
         {
             #region // databases injection
             services.AddDbContext<MyDataBaseContext>(opts => opts.UseSqlServer(connectionString, b => b.MigrationsAssembly("Data")));
@@ -42,20 +42,21 @@ namespace Root
             services.AddScoped<IBillRepository, BillRepository>();
 
             // the implementation of IPlacesRepositoy is gonna be replaced by Places Repository
-            services.AddScoped<IPlacesRepository, MockPlacesRepository>();
+            // services.AddScoped<IPlacesRepository, MockPlacesRepository>(); 
+            services.AddScoped<IPlacesRepository, PlacesRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
 
-            
+
             #endregion
 
             #region // services injection
-           
+
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductTypeService, ProductTypeService>();
             services.AddScoped<ITownService, TownService>();
             services.AddScoped<IRegionService, RegionService>();
-            services.AddScoped<IBusninessTypeService, BusninessTypeService>();            
+            services.AddScoped<IBusninessTypeService, BusninessTypeService>();
             services.AddScoped<ICampaignService, CampaignService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IQuoteService, QuoteService>();
@@ -63,6 +64,7 @@ namespace Root
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IFilesService, FilesService>();
+            services.AddScoped<IPlaceService, PlaceService>();
 
             #endregion
 

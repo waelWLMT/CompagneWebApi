@@ -4,14 +4,16 @@ using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(MyDataBaseContext))]
-    partial class MyDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250413000123_UpdateBusinessTypeEntity")]
+    partial class UpdateBusinessTypeEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,20 +181,20 @@ namespace Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Designation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GeoApiPlaceCategory")
+                    b.Property<string>("GeoApiPlaceCategry")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GeoApiPlaceCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("GoogleMapPlaceCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("LastModifAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("MapCode")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

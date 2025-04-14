@@ -47,11 +47,6 @@ namespace BL.Services.Impl
                 // Handle error response
                 throw new Exception("Error fetching data from API");
             }
-
-
-
-
-            return null;
         }
 
         ICollection<BusinessType> IBusninessTypeService.GetByPostalCodesAndType(List<string> postalCodes, string mapCode)

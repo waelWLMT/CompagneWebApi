@@ -3,13 +3,14 @@ using Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BL.Services
 {
     public interface ICampaignService : IServicePattern<Campaign>
     {
-        List<CampaignBusiness> GetTownBusinesses(Campaign campaign, Town town, List<BusinessType> businessTypes);
-        Campaign AddCampaignTown(int campaignId, int townId);
+        Task<List<CampaignBusiness>> GetTownBusinesses(Campaign campaign, Town town, List<BusinessType> businessTypes);
+        Task<Campaign> AddCampaignTown(int campaignId, int townId);
         Campaign DeleteCampaignTown(int campaignId, int townId);
         List<Campaign> GetAllCampaigns();
         Campaign UpdateCampaignGlobalParameters(int campaignId, Campaign campaignModif);
@@ -24,11 +25,11 @@ namespace BL.Services
         Campaign LaunchCampaignRealization(int campaignId, int userId);
         Campaign initDuplicatedCampaign(Campaign oldCampaign, int userId);
         int DuplicateCampaign(int campaignId, int userId);
-        void InitCampaignBusinesses(ref Campaign campaign);
+        Task InitCampaignBusinesses(Campaign campaign);
         void InitCampaignProducts(ref Campaign campaign, List<int> productTypesIds);
         int CreateCampaign(Campaign campaign, int regionId, List<int> townsIds, List<string> businessTypesIds, List<int> productTypeIds, int customerId);
         Campaign AddCampaignProduct(int campaignId, int productTypeId);
-        Campaign AddCampaignBusinessType(int campaignId, string businessTypeMapCode);
+        Task<Campaign> AddCampaignBusinessType(int campaignId, string businessTypeMapCode);
         List<DetailsCampaignTown> GetListDetailsCampaignTowns(int campaignId);
         CampaignBusiness UpdateCampaignBusinessState(int campaignId, int newStateId, int userModifId, int campaignBusinessId);
     }

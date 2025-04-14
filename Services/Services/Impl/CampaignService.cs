@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BL.Services.Impl
 {
@@ -36,7 +37,7 @@ namespace BL.Services.Impl
 
         #region Campaign Town Management
 
-        public Campaign AddCampaignTown(int campaignId, int townId)
+        public async Task<Campaign> AddCampaignTown(int campaignId, int townId)
         {
             var campaign = GetCampaignByIdFullData(campaignId);
             var town = _townRepo.GetById(townId);
@@ -44,7 +45,7 @@ namespace BL.Services.Impl
             if (campaign != null && town != null && !campaign.CampaignTowns.Contains(town))
             {
                 campaign.CampaignTowns.Add(town);
-                var townBusinesses = GetTownBusinesses(campaign, town, campaign.CampaignBusinessTypes.ToList());
+                var townBusinesses = await GetTownBusinesses(campaign, town, campaign.CampaignBusinessTypes.ToList());
 
                 foreach (var business in townBusinesses)
                     campaign.CampaignBusinesses.Add(business);
@@ -175,7 +176,7 @@ namespace BL.Services.Impl
 
         #region Campaign Businesses and BusinessTypes  Management
 
-        public Campaign AddCampaignBusinessType(int campaignId, string businessTypeMapCode)
+        public async Task<Campaign> AddCampaignBusinessType(int campaignId, string businessTypeMapCode)
         {
             var campaign = GetCampaignByIdFullData(campaignId);
 
@@ -192,7 +193,9 @@ namespace BL.Services.Impl
                     // update campaignBusinesses
                     foreach (var town in campaign.CampaignTowns)
                     {
-                        var places = _placesRepository.GetPlacesList(town, businessType).ToList<Place>();
+                        //var places = await _placesRepository.GetPlacesList(town, businessType);
+
+                        var places = await _placesRepository.GetListPlacesFromGeoApi(new List<string> { town.PostalCode }, businessType.GeoApiPlaceCode);
 
                         foreach (var place in places)
                         {
@@ -225,7 +228,7 @@ namespace BL.Services.Impl
         public Campaign DeleteCampaignBusinessType(int campaignId, string BusinessTypeMapCode)
         {
             var campaign = this.GetCampaignByIdFullData(campaignId);
-            var businessType = campaign.CampaignBusinessTypes.FirstOrDefault(x => x.MapCode == BusinessTypeMapCode);
+            var businessType = campaign.CampaignBusinessTypes.FirstOrDefault(x => x.Designation == BusinessTypeMapCode);
 
             if (businessType != null)
             {
@@ -243,7 +246,7 @@ namespace BL.Services.Impl
 
             return campaign;
         }
-        public void InitCampaignBusinesses(ref Campaign campaign)
+        public async Task InitCampaignBusinesses(Campaign campaign)
         {
             var errorMsg = "";
 
@@ -256,7 +259,7 @@ namespace BL.Services.Impl
                 throw new Exception(errorMsg);
             }
 
-            if (towns == null || towns.Count() <= 0)
+            if (towns == null || !towns.Any())
             {
                 errorMsg = "le compagne ne contient pas des villes!!";
                 throw new Exception(errorMsg);
@@ -266,7 +269,7 @@ namespace BL.Services.Impl
 
             foreach (var town in towns)
             {
-                var businesses = GetTownBusinesses(campaign, town, campaign.CampaignBusinessTypes.ToList());
+                var businesses = await GetTownBusinesses(campaign, town, campaign.CampaignBusinessTypes.ToList());
 
                 foreach (var item in businesses)
                     campaign.CampaignBusinesses.Add(item);
@@ -276,13 +279,16 @@ namespace BL.Services.Impl
             }
 
         }
-        public List<CampaignBusiness> GetTownBusinesses(Campaign campaign, Town town, List<BusinessType> businessTypes)
+        public async Task<List<CampaignBusiness>> GetTownBusinesses(Campaign campaign, Town town, List<BusinessType> businessTypes)
         {
             var TownBusinesses = new HashSet<CampaignBusiness>();
 
             foreach (var businessType in businessTypes)
             {
-                var places = _placesRepository.GetPlacesList(town, businessType).ToList<Place>();
+                //var places = _placesRepository.GetPlacesList(town, businessType).ToList<Place>();
+
+                var places = await _placesRepository.GetListPlacesFromGeoApi(new List<string> { town.PostalCode }, businessType.GeoApiPlaceCode);
+
 
                 foreach (var place in places)
                 {
@@ -427,7 +433,7 @@ namespace BL.Services.Impl
                 InitCampaignProducts(ref campaign, productTypeIds);
 
                 // Set campaign Businesses
-                InitCampaignBusinesses(ref campaign);
+                InitCampaignBusinesses(campaign);
 
                 campaign.TotalCost = (float)CountCampaignTotalCost(campaign);
 
@@ -477,7 +483,7 @@ namespace BL.Services.Impl
             var oldCampaign = this.GetCampaignByIdFullData(campaignId);
 
             var townsList = oldCampaign.CampaignTowns.Select(x => x.Id).ToList();
-            var businessTypesListCodes = oldCampaign.CampaignBusinessTypes.Select(x => x.MapCode).ToList();
+            var businessTypesListCodes = oldCampaign.CampaignBusinessTypes.Select(x => x.Designation).ToList();
             var productTypeListIds = oldCampaign.CampaignProducts.Select(x => x.ProductTypeId).ToList();
             var regionId = oldCampaign.RegionId;
             var customerId = oldCampaign.CustomerId;

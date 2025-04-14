@@ -125,12 +125,27 @@ namespace Data.Repositories.Impl
             return place;
         }
 
+        public Task<List<Place>> GetListPlacesFromGeoApi(List<string> postalCodes, string placeType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Place>> GetPlacesFromOverPassApi(List<string> codesPostaux, string tagKey, string tagValue, string pays = "FR")
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Place> GetPlacesList(Town town, BusinessType businessType)
         {
             if (town.City.ToUpper().Contains("PARIS"))            
                 return businessType.Id == 38 ? (List<Place>)_parisSalleDeSport : (List<Place>)_parisRestaurants;            
             else
                 return businessType.Id == 38 ? (List<Place>) _montreuilSalleDeSport : (List<Place>)_montreuilRestaurants;                     
+        }
+
+        Task<List<Place>> IPlacesRepository.GetPlacesList(Town town, BusinessType businessType)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Data.Repositories.Impl
 
         public ICollection<BusinessType> GetBusinessInListMapCodes(List<string> businessTypesIds)
         {
-            return Entities.Where(x => businessTypesIds.Contains(x.MapCode)).ToList();           
+            return Entities.Where(x => businessTypesIds.Contains(x.Designation)).ToList();           
         }
     }
 }

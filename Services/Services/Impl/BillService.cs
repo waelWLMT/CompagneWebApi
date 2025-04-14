@@ -34,7 +34,7 @@ namespace BL.Services.Impl
                 billBusiness.Lng = item.Place.Lng.ToString();
 
                 billBusiness.TownName = campaign.CampaignTowns.Where(x => x.Id == item.BusinessTownId).FirstOrDefault().City;
-                billBusiness.BusinessTypeName = campaign.CampaignBusinessTypes.Where(x => x.Id == item.BusinessTypeId).FirstOrDefault().Code;
+                billBusiness.BusinessTypeName = campaign.CampaignBusinessTypes.Where(x => x.Id == item.BusinessTypeId).FirstOrDefault().MapCode;
                 billBusiness.BusinessCost = this.CountBusinessCost(campaign.CampaignProducts.ToList());
 
                 billBusinessList.Add(billBusiness);
