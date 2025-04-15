@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApi.Helpers
 {
-    public class AppSettings
+    public class AppSettings_OldOne
     {
         public string Secret { get; set; }
     }

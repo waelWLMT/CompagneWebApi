@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BL.Services;
 using Core.Models;
+using Core.Utils.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;

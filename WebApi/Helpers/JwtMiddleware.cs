@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using BL.Services;
+using Core.Utils.Settings;
 
 namespace WebApi.Helpers
 {

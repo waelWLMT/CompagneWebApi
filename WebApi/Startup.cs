@@ -1,4 +1,5 @@
 using AutoMapper;
+using Core.Utils.Settings;
 using Data.Repositories;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
@@ -39,7 +40,6 @@ namespace WebApi
             .AddCertificate();
             */
 
-
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -53,16 +53,15 @@ namespace WebApi
                     });
             });
 
-            services.AddHttpClient();
-            
+            services.AddHttpClient();            
 
             CompositionRoot.InjectDependencies(services, Configuration.GetConnectionString("Cnx"));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
             services.AddControllers().AddNewtonsoftJson();
-           
 
             // configure strongly typed settings object
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
             // add authenticationservice to the DI container
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IStringCryptorDecryptor, StringCryptorDecryptor>();
