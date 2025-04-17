@@ -4,14 +4,16 @@ using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(MyDataBaseContext))]
-    partial class MyDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250415160603_ModifieBusinessTypeEntity")]
+    partial class ModifieBusinessTypeEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -877,12 +879,6 @@ namespace Data.Migrations
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("PlaceId")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("TagKeyCode")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("TagValueCode")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("CampaignBusinessId");

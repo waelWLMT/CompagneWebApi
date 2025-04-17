@@ -3,6 +3,7 @@ using BL.Services;
 using Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -76,19 +77,19 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("DuplicateCampagn/{campaignId}/{userId}")]
-        public int DuplicateCampaign(int campaignId, int userId)
+        public async Task<int> DuplicateCampaign(int campaignId, int userId)
         {
-            var nveCampaignId = this._campaignService.DuplicateCampaign(campaignId, userId);
+            var nveCampaignId = await this._campaignService.DuplicateCampaign(campaignId, userId);
             return nveCampaignId;
         }
 
         [HttpPost]
-        public int CreateCompaignStepOne(CampaignCreateDto campaignCreateDto)
+        public async Task<int> CreateCompaignStepOne(CampaignCreateDto campaignCreateDto)
         {
             var campaign = _mapper.Map<Campaign>(campaignCreateDto);
-            var campaignId = _campaignService.CreateCampaign(campaign, campaignCreateDto.RegionId, campaignCreateDto.TownsIds, campaignCreateDto.BusinessTypesIds, campaignCreateDto.ProductTypeIds, campaignCreateDto.CustomerId);
+            var campaignId = await _campaignService.CreateCampaign(campaign, campaignCreateDto.RegionId, campaignCreateDto.TownsIds, campaignCreateDto.BusinessTypesIds, campaignCreateDto.ProductTypeIds, campaignCreateDto.CustomerId);
 
-            return campaignId;
+            return campaignId; // businessTypesIds
         }
 
         [HttpDelete]
@@ -150,9 +151,9 @@ namespace WebApi.Controllers
         [HttpGet]
         [Route("addCampaignTown/{campaignId}/{townId}")]
 
-        public CampaignReadDto AddCampaignTown(int campaignId, int townId)
+        public async Task<CampaignReadDto> AddCampaignTown(int campaignId, int townId)
         {
-            var campaign = _campaignService.AddCampaignTown(campaignId, townId);
+            var campaign = await _campaignService.AddCampaignTown(campaignId, townId);
             var result = _mapper.Map<CampaignReadDto>(campaign);
 
             return result;
@@ -227,20 +228,20 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteCampaignBusinessType/{campaignId}/{BusinessTypeMapCode}")]
-        public CampaignReadDto DeleteCampaignBusinessType(int campaignId, string BusinessTypeMapCode)
+        [Route("deleteCampaignBusinessType/{campaignId}/{businessTypeId}")]
+        public CampaignReadDto DeleteCampaignBusinessType(int campaignId, int businessTypeId)
         {
-            var campaign = _campaignService.DeleteCampaignBusinessType(campaignId, BusinessTypeMapCode);
+            var campaign = _campaignService.DeleteCampaignBusinessType(campaignId, businessTypeId);
             var campaignDto = _mapper.Map<CampaignReadDto>(campaign);
 
             return campaignDto;
         }
 
         [HttpGet]
-        [Route("addCampaignBusinessType/{campaignId}/{businessTypeMapCode}")]
-        public CampaignReadDto AddCampaignBusinessType(int campaignId, string businessTypeMapCode)
+        [Route("addCampaignBusinessType/{campaignId}/{businessTypeId}")]
+        public async Task<CampaignReadDto> AddCampaignBusinessType(int campaignId, int businessTypeId)
         {
-            var campaign = _campaignService.AddCampaignBusinessType(campaignId, businessTypeMapCode);
+            var campaign = await _campaignService.AddCampaignBusinessType(campaignId, businessTypeId);
             var result = _mapper.Map<CampaignReadDto>(campaign);
 
             return result;
@@ -273,15 +274,26 @@ namespace WebApi.Controllers
 
         #endregion
 
-
         [HttpPost]
         [Route("GetPlaceListByPostalCodesAndType")]
         public async Task<List<Place>> GetPlaceListByPostalCodesAndType(SearchPlacesDto searchPlacesCreteria)
         {
-            return await _placeService.GetPlacesList(searchPlacesCreteria.PostalCodes, searchPlacesCreteria.PlaceTypeKey, searchPlacesCreteria.PlaceTypeValue);
+            var places = new List<Place>();
+            var postalCodes = "75008,45100".Split(",").ToList();
+            var businessTypeIds = "1,7,8";
+            var tasks = new List<Task<List<Place>>>();
+
+            foreach (var postalCode in postalCodes)            
+                tasks.Add(_placeService.GetPlacesList(postalCode, businessTypeIds));
+
+            var results = await Task.WhenAll(tasks);
+
+            foreach (var result in results)            
+                places.AddRange(result);                
+            
+            return places;
+
         }
-
-
 
     }
 }

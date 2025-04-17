@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography;
 using System.Text;
@@ -36,7 +37,7 @@ namespace Data.Repositories.Impl
         public PlacesRepository(IHttpClientFactory httpclientFactory, IOptions<AppSettings> appSettings)
         {
             _httpClientFactory = httpclientFactory;
-            _appSettings = appSettings.Value; 
+            _appSettings = appSettings.Value;
         }
 
         #region overpass api good code
@@ -83,9 +84,21 @@ namespace Data.Repositories.Impl
             return address;
 
         }
-        private Place buildPlaceFromOverPassApiResponse(JToken element)
+        private Place buildPlaceFromOverPassApiResponse(JToken element, HashSet<BusinessType> tags)
         {
             var place = new Place();
+            
+            var tagKey = "";   // Place Type key == Business type tagkeyCode
+            var tagValue = ""; // Place Type key == Business type tagValueCode
+
+            foreach (var tag in tags)
+            {
+                if (element["tags"]?[tag.TagKeyCode] != null && element["tags"]?[tag.TagKeyCode].ToString().Trim() == tag.TagValueCode) {
+                    tagKey = tag.TagKeyCode;
+                    tagValue = tag.TagValueCode;
+                    break;
+                }
+            }
 
             // Extract Place Name
             var placeName = element["tags"]?["name"]?.ToString() ?? "Inconnu";
@@ -94,15 +107,18 @@ namespace Data.Repositories.Impl
             // Extract Longitude
             double? lon = element["lon"]?.ToObject<double>();
 
-            if (lat.HasValue && lon.HasValue)
+            if (lat.HasValue && lon.HasValue && !string.IsNullOrEmpty(tagKey) && !string.IsNullOrEmpty(tagValue))
             {
+                place.PlaceId = element["id"]?.ToString() ?? "Inconnu";
                 place.Name = placeName;
                 place.Lat = lat.Value;
                 place.Lng = lon.Value;
                 place.PlaceAdresse = buildAdresse(element);
+                place.TagKeyCode = tagKey;
+                place.TagValueCode = tagValue;
 
                 return place;
-            }
+            }            
 
             return null;
 
@@ -132,7 +148,7 @@ namespace Data.Repositories.Impl
 
                 foreach (var element in result["elements"])
                 {
-                    var place = buildPlaceFromOverPassApiResponse(element);
+                    var place = buildPlaceFromOverPassApiResponse(element, new HashSet<BusinessType> { new BusinessType { TagKeyCode = tagKey, TagValueCode = tagValue } });
 
                     if (place != null)
                         places.Add(place);
@@ -146,221 +162,69 @@ namespace Data.Repositories.Impl
             return places;
 
         }
-
-        #endregion
-
-
-
-
-        #region deprecated old code à supprimer
-        private string BuildHttpRequestUrl(double lat, double lng, string placeType)
+        public async Task<List<Place>> GetPlacesFromOverPassApi(string postalCode, HashSet<BusinessType> tags, string pays = "FR")
         {
-            var url = this._appSettings.GooglePlacesSettings.PlacesApiBaseUrl;
+            // cette methode doit chercher la liste des lieux en se basant sur un code postale et une liste des tags
 
-            url += "?location=" + lat;
-            url += "," + lng;
-            url += "&radius=" + this._appSettings.GooglePlacesSettings.DefaultSearchPlacesRadius;
-            url += "&type=" + placeType;
-            url += "&keyword=";
-            url += "&key=" + this._appSettings.GooglePlacesSettings.GoogleMapPlacesAPIKey;
-
-            return url;
-        }
-
-        public Place BuildPlace(JToken jToken)
-        {
-            var place = new Place();
-
-            place.PlaceId = jToken.SelectToken("place_id").Value<string>();
-            place.Name = jToken.SelectToken("name").Value<string>();
-            place.Lat = jToken.SelectToken("geometry").SelectToken("location").SelectToken("lat").Value<double>();
-            place.Lng = jToken.SelectToken("geometry").SelectToken("location").SelectToken("lng").Value<double>();
-
-            return place;
-        }
-
-        public async Task<List<Place>> GetPlacesList(Town town, BusinessType businessType)
-        {
             var places = new List<Place>();
+            var overpassUrl = _appSettings.OverPassApiSettings.OverPassUrl;
+            var query = makeMyQuery(postalCode, tags, pays);
 
-            // make http get request
-            var httpClient = HttpClientFactory.Create();
-            var url = BuildHttpRequestUrl(town.Lat, town.Lng, businessType.Designation);
-            var httpResponseMessage = await httpClient.GetAsync(url);
-
-
-            // extract places from response
-            if (httpResponseMessage.StatusCode == HttpStatusCode.OK)
-            {
-                var content = httpResponseMessage.Content;
-                //var data = content.ReadAsStringAsync();
-
-                var data = content.ReadAsStringAsync();
-
-                var jObject = JObject.Parse(data.Result);
-                var jArray = jObject.SelectToken("results");
-
-                foreach (var item in jArray)
-                    places.Add(BuildPlace(item));
-            }
-
-            return places;
-        }
-
-        public async Task<List<Place>> GetListPlacesFromGeoApi(List<string> postalCodes, string placeType)
-        {
-            #region new code over pass api
-
-            var codes = new List<string> { "75001", "75002", "75003", "45000" };
-            string type = "bar";
-            string country = "FR";
-
-            var lieux = await GetPlacesFromOverPassApi(codes, type, country);
-
-            return lieux;
-
-
-            #endregion
-
-            #region GeoPlacesCode
-            //// Créer une instance HttpClient
-            //var client = _httpClientFactory.CreateClient();
-
-            //try
-            //{
-            //    // Liste pour stocker les tâches de recherche
-            //    List<Task<string>> tasks = new List<Task<string>>();
-
-            //    // Créer les tâches pour chaque code postal
-            //    foreach (var postalCode in postalCodes)
-            //    {
-            //        // Créer une tâche pour chaque requête HTTP
-            //        tasks.Add(GetPlaces(client, postalCode, placeType, _geoApiKey));
-            //    }
-
-            //    // Attendre que toutes les requêtes soient terminées
-            //    var results = await Task.WhenAll(tasks);
-
-
-
-            //    // Liste pour stocker tous les résultats
-            //    List<string> allPlaces = new List<string>();
-
-            //    // Traiter les résultats
-            //    foreach (var result in results)
-            //    {
-            //        if (!string.IsNullOrEmpty(result))
-            //        {
-            //            var places = JsonConvert.DeserializeObject<dynamic>(result);
-            //            if (places != null && places.results != null)
-            //            {
-            //                foreach (var place in places.results)
-            //                {
-            //                    string placeInfo = $"{place.name}: {place.address}";
-            //                    allPlaces.Add(placeInfo);
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    // Afficher tous les résultats après avoir reçu toutes les réponses
-            //    if (allPlaces.Any())
-            //    {
-            //        Console.WriteLine("Liste des boulangeries trouvées:");
-            //        foreach (var place in allPlaces)
-            //        {
-            //            Console.WriteLine($"- {place}");
-            //        }
-            //    }
-            //    //else
-            //    //{
-            //    //    Console.WriteLine("Aucune boulangerie trouvée dans les codes postaux spécifiés.");
-            //    //}
-
-            //    return new List<Place>(allPlaces.Select(p => new Place
-            //    {
-            //        Name = p.Split(':')[0],
-            //        PlaceId = p.Split(':')[1]
-            //    }));
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine($"Erreur lors de la recherche: {ex.Message}");
-            //    throw ex;
-
-            //}
-            //finally
-            //{
-            //    client.Dispose(); // Libérer les ressources du client HTTP   
-            //}
-
-            #endregion
-        }
-
-       
-        public async Task<List<Place>> GetPlacesFromOverPassApi_OLD(List<string> codesPostaux, string tagKey, string tagValue, string pays = "FR")
-        {
-            var places = new List<Place>();
             using var client = new HttpClient();
+            var content = new StringContent("data=" + Uri.EscapeDataString(query), System.Text.Encoding.UTF8, "application/x-www-form-urlencoded");
+            var response = await client.PostAsync(overpassUrl, content);
 
-            foreach (var codePostal in codesPostaux)
+            if (response.IsSuccessStatusCode)
             {
-                string query = $@"
-                                [out:json][timeout:25];
-                                // Délimitation par pays et code postal
-                            area[""name""=""{pays}""]->.country;
-                                (
-                                 node[""addr:postcode""=""{codePostal}""][""{tagKey}""=""{tagValue}""](area.country);
-                                 way[""addr:postcode""=""{codePostal}""][""{tagKey}""=""{tagValue}""](area.country);
-                                 relation[""addr:postcode""=""{codePostal}""][""{tagKey}""=""{tagValue}""](area.country);
-                            );
-                            out center;";
+                string json = await response.Content.ReadAsStringAsync();
+                JObject result = JObject.Parse(json);
 
-                var response = await client.PostAsync(
-                    "https://overpass-api.de/api/interpreter",
-                    new StringContent($"data={Uri.EscapeDataString(query)}", Encoding.UTF8, "application/x-www-form-urlencoded")
-                );
-
-                var content = await response.Content.ReadAsStringAsync();
-
-                using JsonDocument doc = JsonDocument.Parse(content);
-                JsonElement root = doc.RootElement;
-
-                Console.WriteLine($"\n🔎 Résultats pour {tagKey}={tagValue} dans le code postal {codePostal} ({pays}):");
-
-                foreach (var element in root.GetProperty("elements").EnumerateArray())
+                foreach (var element in result["elements"])
                 {
-                    string name = element.TryGetProperty("tags", out var tags) && tags.TryGetProperty("name", out var nameProp)
-                        ? nameProp.GetString()
-                        : "Sans nom";
+                    var place = buildPlaceFromOverPassApiResponse(element, tags);
 
-                    string lat = element.TryGetProperty("tags", out var tagsLat) && tags.TryGetProperty("name", out var latProp)
-                        ? latProp.GetString()
-                        : "Sans nom";
-
-                    string lng = element.TryGetProperty("tags", out var tagsLng) && tags.TryGetProperty("name", out var lngProp)
-                        ? lngProp.GetString()
-                        : "Sans nom";
-
-
-                    Console.WriteLine($"• Type: {element.GetProperty("type")} | Nom: {name}");
-                    Console.WriteLine($"• Type: {element.GetProperty("type")} | Nom: {lat}");
-                    Console.WriteLine($"• Type: {element.GetProperty("type")} | Nom: {lng}");
-
-                    places.Add(new Place() { Name = name, Lat = Convert.ToDouble(lat), Lng = Convert.ToDouble(lng) });
+                    if (place != null)
+                        places.Add(place);
                 }
-
+            }
+            else
+            {
+                throw new Exception($"Erreur Overpass API: {response.StatusCode}");
             }
 
             return places;
-        }
 
-        
+
+        }
+        private string makeMyQuery(string postalCode, HashSet<BusinessType> tags, string pays)
+        {
+            // Requête dynamique avec filtre pays + code postal
+            var query = "[out:json][timeout:25];\n";
+
+            // Définir l'aire du pays (FR = France, admin_level=2)
+            query += $"area[\"ISO3166-1\"=\"{pays}\"][admin_level=2]->.country;\n";
+
+            // Définir l'aire du code postal *dans* ce pays
+            query += $"area[\"postal_code\"=\"{postalCode}\"][boundary=postal_code](area.country)->.searchArea;\n";
+
+            // Ouverture du bloc de requête
+            query += "(\n";
+
+            foreach (var tag in tags)
+            {
+                query += $"  node[\"{tag.TagKeyCode}\"=\"{tag.TagValueCode}\"](area.searchArea);\n";
+            }
+
+            query += ");\nout body;\n>;\nout skel qt;";
+
+            return query;
+        }
 
         #endregion
 
 
-      
+
+
+
     }
 }

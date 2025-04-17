@@ -41,8 +41,7 @@ namespace Root
 
             services.AddScoped<IBillRepository, BillRepository>();
 
-            // the implementation of IPlacesRepositoy is gonna be replaced by Places Repository
-            // services.AddScoped<IPlacesRepository, MockPlacesRepository>(); 
+            // the implementation of IPlacesRepositoy is gonna be replaced by Places Repository            
             services.AddScoped<IPlacesRepository, PlacesRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
 

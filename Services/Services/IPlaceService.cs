@@ -9,6 +9,6 @@ namespace BL.Services
     public interface IPlaceService
     {
         Task<List<Place>> GetPlacesList(List<string> postalCodes, string placeTypeKey, string placeTypeValue);
-
+        Task<List<Place>> GetPlacesList(string postalCodes, string placeTypeIds);
     }
 }

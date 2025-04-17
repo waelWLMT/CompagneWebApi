@@ -9,10 +9,7 @@ namespace Data.Repositories
 {
     public interface IPlacesRepository
     {
-        Place BuildPlace(JToken jToken);
-        Task<List<Place>> GetPlacesList(Town town, BusinessType businessType);          
-        Task<List<Place>> GetListPlacesFromGeoApi(List<string> postalCodes, string placeType);
         Task<List<Place>> GetPlacesFromOverPassApi(List<string> codesPostaux, string tagKey, string tagValue, string pays = "FR");
-
+        Task<List<Place>> GetPlacesFromOverPassApi(string postalCode, HashSet<BusinessType> placeTypes, string pays = "FR");
     }
 }

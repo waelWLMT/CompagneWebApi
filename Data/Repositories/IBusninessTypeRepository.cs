@@ -7,10 +7,7 @@ namespace Data.Repositories
 {
     public interface IBusninessTypeRepository : IRepository<BusinessType>
     {
-
         ICollection<BusinessType> GetActivatedBusinessTypes();
-        ICollection<BusinessType> GetBusinessInListMapCodes(List<string> businessTypesIds);
-
-// test
+        ICollection<BusinessType> GetBusinessTypeInListIds(List<string> businessTypesIds);
     }
 }

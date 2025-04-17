@@ -26,15 +26,15 @@ namespace BL.Services.Impl
             var billBusinessList = new List<BillBusiness>();
             foreach (var item in campaign.CampaignBusinesses)
             {
-
                 var billBusiness = new BillBusiness();
-
                 billBusiness.BusinessName = item.Place.Name;
                 billBusiness.Lat = item.Place.Lat.ToString();
                 billBusiness.Lng = item.Place.Lng.ToString();
 
                 billBusiness.TownName = campaign.CampaignTowns.Where(x => x.Id == item.BusinessTownId).FirstOrDefault().City;
-                billBusiness.BusinessTypeName = campaign.CampaignBusinessTypes.Where(x => x.Id == item.BusinessTypeId).FirstOrDefault().MapCode;
+                
+                billBusiness.BusinessTypeName = campaign.CampaignBusinessTypes.Where(x => x.Id == item.BusinessTypeId).FirstOrDefault().TagValueCode;
+                
                 billBusiness.BusinessCost = this.CountBusinessCost(campaign.CampaignProducts.ToList());
 
                 billBusinessList.Add(billBusiness);

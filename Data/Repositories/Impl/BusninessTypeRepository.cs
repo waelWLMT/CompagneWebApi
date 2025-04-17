@@ -12,12 +12,12 @@ namespace Data.Repositories.Impl
 
         public ICollection<BusinessType> GetActivatedBusinessTypes()
         {            
-            return Entities.Where(x => x.Activated == true).ToList();
+            return Entities.Where(x => x.Activated).ToList();
         }
 
-        public ICollection<BusinessType> GetBusinessInListMapCodes(List<string> businessTypesIds)
+        public ICollection<BusinessType> GetBusinessTypeInListIds(List<string> businessTypesIds)
         {
-            return Entities.Where(x => businessTypesIds.Contains(x.Designation)).ToList();           
+            return Entities.Where(x=> businessTypesIds.Contains(x.Id.ToString())).ToList();
         }
     }
 }

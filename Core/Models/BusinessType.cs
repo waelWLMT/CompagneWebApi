@@ -5,13 +5,16 @@ using System.Text;
 namespace Core.Models
 {
     public class BusinessType : BaseEntity
-    {        
+    {
         // properties
-        public string MapCode { get; set; }
-        public string Designation { get; set; }
-        public string GeoApiPlaceCode { get; set; }
-        public string GeoApiPlaceCategory { get; set; }
-        public string Description { get; set; }
+        /**
+         * ceci est la liste des propriété de type de lieu 
+         * exemple : TagKeyCode: "shop", TagValueCode: "bakery", TagKeyDesignation: "Commerce", TagValueDesignation: "Boulangerie"        
+        */
+        public string TagKeyCode { get; set; }
+        public string TagValueCode { get; set; }
+        public string TagKeyDesignation { get; set; }
+        public string TagValueDesignation { get; set; }
         public bool Activated { get; set; }
 
         // navigation properties

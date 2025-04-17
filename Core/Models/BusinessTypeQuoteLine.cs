@@ -10,7 +10,7 @@ namespace Core.Models
     public class BusinessTypeQuoteLine: BaseEntity
     {
         public int BusinessTypeId { get; set; }
-        public string BusinessTypeCode { get; set; }
+        public string BusinessTypeDesignation { get; set; }
         public float BusinessCost { get; set; }
         public int NbrBusinessTypePerCampagne { get; set; }
 

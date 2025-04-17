@@ -107,7 +107,7 @@ namespace BL.Services.Impl
 
                     QuoteId = devis.Id,
                     BusinessTypeId = businessType.Id,
-                    BusinessTypeCode = businessType.MapCode,
+                    BusinessTypeDesignation = businessType.TagValueDesignation,
                     BusinessCost = devis.BusinessCost
                 };
 

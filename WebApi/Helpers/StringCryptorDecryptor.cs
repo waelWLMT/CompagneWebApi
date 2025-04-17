@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Core.Utils.Settings;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,16 +12,16 @@ using System.Threading.Tasks;
 namespace WebApi.Helpers
 {
     public class StringCryptorDecryptor: IStringCryptorDecryptor
-    {
-        private readonly string _keyString;
+    {        
+        private AppSettings _appSettings;
 
-        public StringCryptorDecryptor(IConfiguration configuration)
+        public StringCryptorDecryptor(IOptions<AppSettings> options)
         {
-            _keyString = configuration.GetSection("PwdCryptKey").Value.ToString();
+            _appSettings = options.Value;            
         }
         public string EncryptString(string text)
         {
-            var key = Encoding.UTF8.GetBytes(_keyString);
+            var key = Encoding.UTF8.GetBytes(_appSettings.PwdCryptKey);
 
             using (var aesAlg = Aes.Create())
             {
@@ -57,7 +59,7 @@ namespace WebApi.Helpers
 
             Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
             Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, iv.Length);
-            var key = Encoding.UTF8.GetBytes(_keyString);
+            var key = Encoding.UTF8.GetBytes(_appSettings.PwdCryptKey);
 
             using (var aesAlg = Aes.Create())
             {
@@ -79,5 +81,7 @@ namespace WebApi.Helpers
                 }
             }
         }
+   
+    
     }
 }

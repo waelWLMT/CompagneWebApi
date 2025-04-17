@@ -12,5 +12,6 @@ namespace Core.Utils.Settings
         public CampagneFolderSettings CampagneFolderSettings { get; set; }
         public GooglePlacesSettings GooglePlacesSettings { get; set; }
         public string PwdCryptKey { get; set; }
+        public string CampagnePenetraionRate { get; set; }
     }
 }
