@@ -9,6 +9,8 @@ namespace BL.Services
 {
     public interface ICampaignService : IServicePattern<Campaign>
     {
+
+        DetailsCampaignTown GetListDetailedCampaignTown(int campaignId, int townId);
         Task<List<CampaignBusiness>> GetTownBusinesses(Campaign campaign, List<Town> towns, List<BusinessType> businessTypes);
         Task<Campaign> AddCampaignTown(int campaignId, int townId);
         Campaign DeleteCampaignTown(int campaignId, int townId);

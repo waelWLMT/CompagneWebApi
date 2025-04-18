@@ -128,6 +128,16 @@ namespace WebApi.Controllers
         #region Campaign Towns Managment
 
         [HttpGet]
+        [Route("getDetailedCampaignTown")]
+        public DetailsCampaignTownReadDto GetDetailedCampaignTown(int campaignId, int townId)
+        {
+            var detailedTown = _campaignService.GetListDetailedCampaignTown(campaignId, townId);
+            var result = _mapper.Map<DetailsCampaignTownReadDto>(detailedTown);
+            
+            return result;
+        }
+
+        [HttpGet]
         [Route("getCampaignTownMap/{campaignId}")]
         public List<DetailsCampaignTownReadDto> GetCampaignTownMap(int campaignId)
         {
@@ -150,7 +160,6 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("addCampaignTown/{campaignId}/{townId}")]
-
         public async Task<CampaignReadDto> AddCampaignTown(int campaignId, int townId)
         {
             var campaign = await _campaignService.AddCampaignTown(campaignId, townId);
@@ -158,8 +167,6 @@ namespace WebApi.Controllers
 
             return result;
         }
-
-
 
         #endregion
 
