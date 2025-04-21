@@ -13,7 +13,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography;
 using System.Text;

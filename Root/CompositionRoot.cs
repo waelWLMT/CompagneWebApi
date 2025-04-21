@@ -64,6 +64,7 @@ namespace Root
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IFilesService, FilesService>();
             services.AddScoped<IPlaceService, PlaceService>();
+            services.AddScoped<IReportService, ReportService>();
 
             #endregion
 
