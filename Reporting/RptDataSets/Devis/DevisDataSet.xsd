@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DevisDataSet" targetNamespace="http://tempuri.org/DevisDataSet.xsd" xmlns:mstns="http://tempuri.org/DevisDataSet.xsd" xmlns="http://tempuri.org/DevisDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DevisDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="DevisDataSet" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DevisDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="DevisProduct" msprop:Generator_RowEvHandlerName="DevisProductRowChangeEventHandler" msprop:Generator_RowDeletedName="DevisProductRowDeleted" msprop:Generator_RowDeletingName="DevisProductRowDeleting" msprop:Generator_RowEvArgName="DevisProductRowChangeEvent" msprop:Generator_TablePropName="DevisProduct" msprop:Generator_RowChangedName="DevisProductRowChanged" msprop:Generator_UserTableName="DevisProduct" msprop:Generator_RowChangingName="DevisProductRowChanging" msprop:Generator_RowClassName="DevisProductRow" msprop:Generator_TableClassName="DevisProductDataTable" msprop:Generator_TableVarName="tableDevisProduct">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ProductId" msprop:Generator_ColumnPropNameInTable="ProductIdColumn" msprop:Generator_ColumnPropNameInRow="ProductId" msprop:Generator_UserColumnName="ProductId" msprop:Generator_ColumnVarNameInTable="columnProductId" type="xs:int" minOccurs="0" />
+              <xs:element name="ProductName" msprop:Generator_ColumnPropNameInTable="ProductNameColumn" msprop:Generator_ColumnPropNameInRow="ProductName" msprop:Generator_UserColumnName="ProductName" msprop:Generator_ColumnVarNameInTable="columnProductName" type="xs:string" minOccurs="0" />
+              <xs:element name="NbrProductPerBusiness" msprop:Generator_ColumnPropNameInTable="NbrProductPerBusinessColumn" msprop:Generator_ColumnPropNameInRow="NbrProductPerBusiness" msprop:Generator_UserColumnName="NbrProductPerBusiness" msprop:Generator_ColumnVarNameInTable="columnNbrProductPerBusiness" type="xs:int" minOccurs="0" />
+              <xs:element name="CostPerBusiness" msprop:Generator_ColumnPropNameInTable="CostPerBusinessColumn" msprop:Generator_ColumnPropNameInRow="CostPerBusiness" msprop:Generator_UserColumnName="CostPerBusiness" msprop:Generator_ColumnVarNameInTable="columnCostPerBusiness" type="xs:double" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="DevisBusinessType" msprop:Generator_RowEvHandlerName="DevisBusinessTypeRowChangeEventHandler" msprop:Generator_RowDeletedName="DevisBusinessTypeRowDeleted" msprop:Generator_RowDeletingName="DevisBusinessTypeRowDeleting" msprop:Generator_RowEvArgName="DevisBusinessTypeRowChangeEvent" msprop:Generator_TablePropName="DevisBusinessType" msprop:Generator_RowChangedName="DevisBusinessTypeRowChanged" msprop:Generator_UserTableName="DevisBusinessType" msprop:Generator_RowChangingName="DevisBusinessTypeRowChanging" msprop:Generator_RowClassName="DevisBusinessTypeRow" msprop:Generator_TableClassName="DevisBusinessTypeDataTable" msprop:Generator_TableVarName="tableDevisBusinessType">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_UserColumnName="Id" msprop:Generator_ColumnVarNameInTable="columnId" type="xs:int" minOccurs="0" />
+              <xs:element name="BusinessTypeDesignation" msprop:Generator_ColumnPropNameInTable="BusinessTypeDesignationColumn" msprop:Generator_ColumnPropNameInRow="BusinessTypeDesignation" msprop:Generator_UserColumnName="BusinessTypeDesignation" msprop:Generator_ColumnVarNameInTable="columnBusinessTypeDesignation" type="xs:string" minOccurs="0" />
+              <xs:element name="BusinessCost" msprop:Generator_ColumnPropNameInTable="BusinessCostColumn" msprop:Generator_ColumnPropNameInRow="BusinessCost" msprop:Generator_UserColumnName="BusinessCost" msprop:Generator_ColumnVarNameInTable="columnBusinessCost" type="xs:double" minOccurs="0" />
+              <xs:element name="NbrBusinessPerCompagne" msprop:Generator_ColumnPropNameInTable="NbrBusinessPerCompagneColumn" msprop:Generator_ColumnPropNameInRow="NbrBusinessPerCompagne" msprop:Generator_UserColumnName="NbrBusinessPerCompagne" msprop:Generator_ColumnVarNameInTable="columnNbrBusinessPerCompagne" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="DevisTowns" msprop:Generator_RowEvHandlerName="DevisTownsRowChangeEventHandler" msprop:Generator_RowDeletedName="DevisTownsRowDeleted" msprop:Generator_RowDeletingName="DevisTownsRowDeleting" msprop:Generator_RowEvArgName="DevisTownsRowChangeEvent" msprop:Generator_TablePropName="DevisTowns" msprop:Generator_RowChangedName="DevisTownsRowChanged" msprop:Generator_UserTableName="DevisTowns" msprop:Generator_RowChangingName="DevisTownsRowChanging" msprop:Generator_RowClassName="DevisTownsRow" msprop:Generator_TableClassName="DevisTownsDataTable" msprop:Generator_TableVarName="tableDevisTowns">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TownId" msprop:Generator_ColumnPropNameInTable="TownIdColumn" msprop:Generator_ColumnPropNameInRow="TownId" msprop:Generator_UserColumnName="TownId" msprop:Generator_ColumnVarNameInTable="columnTownId" type="xs:int" minOccurs="0" />
+              <xs:element name="TownName" msprop:Generator_ColumnPropNameInTable="TownNameColumn" msprop:Generator_ColumnPropNameInRow="TownName" msprop:Generator_UserColumnName="TownName" msprop:Generator_ColumnVarNameInTable="columnTownName" type="xs:string" minOccurs="0" />
+              <xs:element name="TownCost" msprop:Generator_ColumnPropNameInTable="TownCostColumn" msprop:Generator_ColumnPropNameInRow="TownCost" msprop:Generator_UserColumnName="TownCost" msprop:Generator_ColumnVarNameInTable="columnTownCost" type="xs:double" minOccurs="0" />
+              <xs:element name="TownNbrBusinesses" msprop:Generator_ColumnPropNameInTable="TownNbrBusinessesColumn" msprop:Generator_ColumnPropNameInRow="TownNbrBusinesses" msprop:Generator_UserColumnName="TownNbrBusinesses" msprop:Generator_ColumnVarNameInTable="columnTownNbrBusinesses" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

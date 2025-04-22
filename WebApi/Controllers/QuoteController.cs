@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using BL.Services;
+using BL.Services.Impl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Dtos;
@@ -18,14 +20,16 @@ namespace WebApi.Controllers
         private readonly IQuoteService _quoteService;
         private readonly ICampaignService _campaignService;
         private readonly IBillService _billService;
+        private readonly IReportService _reportService;
         private readonly IMapper _mapper;
 
-        public QuoteController(IQuoteService quoteService, ICampaignService campaignService, IBillService billService, IMapper mapper)
+        public QuoteController(IReportService reportService, IQuoteService quoteService, ICampaignService campaignService, IBillService billService, IMapper mapper)
         {
             this._quoteService = quoteService;
             this._campaignService = campaignService;
             this._billService = billService;
             this._mapper = mapper;
+            this._reportService = reportService;
         }
 
         [HttpGet]
@@ -47,6 +51,7 @@ namespace WebApi.Controllers
             var billId = this._billService.GenerateBill(campaign);
 
             return billId;
+            
         }
 
         [HttpGet]
@@ -57,6 +62,18 @@ namespace WebApi.Controllers
             var result = this._mapper.Map<QuoteReadDto>(devis);
 
             return result;
+        }
+
+        [HttpGet]
+        [Route("getDevisCampaigneReport")]
+        public IActionResult GetDevisCampaigneReport(int devisId)
+        {
+            var file = _reportService.GenerateCampaignDevisReport(devisId);
+            if (file == null)
+                return null;
+
+            Stream stream = new MemoryStream(file);
+            return File(stream, "application/pdf", "CampaignDevisRpt.pdf");
         }
 
     }
