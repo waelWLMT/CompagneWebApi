@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Dtos;
@@ -18,10 +19,13 @@ namespace WebApi.Controllers
     {
         private readonly IBillService _billService;
         private readonly IMapper _mapper;
-        public BillController(IBillService billService, IMapper mapper)
+        private readonly IReportService _reportService;
+
+        public BillController(IReportService reportService, IBillService billService, IMapper mapper)
         {
             this._billService = billService;
             this._mapper = mapper;
+            _reportService = reportService;
         }
 
         [HttpGet]
@@ -45,6 +49,19 @@ namespace WebApi.Controllers
 
             return result;
         }
+
+        [HttpGet]
+        [Route("GetFactureReport")]
+        public IActionResult GetFactureReport(int billId)
+        {
+            var file = _reportService.GenerateCampaignFactureReport(billId);
+            if (file == null)
+                return null;
+
+            Stream stream = new MemoryStream(file);
+            return File(stream, "application/pdf", "CampaignFactureRpt.pdf");
+        }
+
 
     }
 }

@@ -32,5 +32,17 @@ namespace Data.Repositories.Impl
 
             return bill;
         }
+
+        public Bill GetByIdFullData(int id)
+        {            
+            var bill = this.Entities
+                .Where(x => x.Id == id)
+                .Include(x => x.Customer)
+                .Include(x => x.BillBusinesses)
+                .Include(x=> x.BillProducts)
+                .FirstOrDefault();            
+
+            return bill;
+        }
     }
 }

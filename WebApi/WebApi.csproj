@@ -26,12 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Reports\ClientReport.rdlc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Reports\Img\" />
   </ItemGroup>
 

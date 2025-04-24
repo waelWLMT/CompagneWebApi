@@ -23,6 +23,11 @@
 		  <AutoGen>True</AutoGen>
 		  <DependentUpon>DevisDataSet.xsd</DependentUpon>
 		</Compile>
+		<Compile Update="RptDataSets\Facture\FactureDataSet.Designer.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>FactureDataSet.xsd</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,10 +39,13 @@
 		  <Generator>MSDataSetGenerator</Generator>
 		  <LastGenOutput>DevisDataSet.Designer.cs</LastGenOutput>
 		</None>
+		<None Update="RptDataSets\Facture\FactureDataSet.xsd">
+		  <Generator>MSDataSetGenerator</Generator>
+		  <LastGenOutput>FactureDataSet.Designer.cs</LastGenOutput>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="RptDataSets\Facture\" />
 	  <Folder Include="RptModels\" />
 	</ItemGroup>
 

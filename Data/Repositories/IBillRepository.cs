@@ -9,5 +9,6 @@ namespace Data.Repositories
     {
         List<Bill> GetAllFullData();
         Bill GetByCampaignId(int campaignId);
+        Bill GetByIdFullData(int id);
     }
 }

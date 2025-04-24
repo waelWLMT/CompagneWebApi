@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace BL.Services
 {
     public interface IReportService
-    {
-        public byte[] GenerateClientReport();
-
+    {        
         public byte[] GenerateCampaignDevisReport(int devisId);
+        public byte[] GenerateCampaignFactureReport(int billId);
     }
 }
