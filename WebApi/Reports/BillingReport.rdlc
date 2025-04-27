@@ -11,7 +11,7 @@
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="Products">
+    <DataSet Name="ProductsDs">
       <Query>
         <DataSourceName>DevisDataSet</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
@@ -43,7 +43,7 @@
         <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="BusinessTypes">
+    <DataSet Name="BusinessTypesDs">
       <Query>
         <DataSourceName>DevisDataSet</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
@@ -75,7 +75,7 @@
         <rd:TableAdapterName />
       </rd:DataSetInfo>
     </DataSet>
-    <DataSet Name="Towns">
+    <DataSet Name="TownsDs">
       <Query>
         <DataSourceName>DevisDataSet</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
@@ -359,7 +359,7 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>Products</DataSetName>
+            <DataSetName>ProductsDs</DataSetName>
             <Top>3.58942cm</Top>
             <Left>0.44309cm</Left>
             <Height>1.2cm</Height>
@@ -721,7 +721,7 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>Towns</DataSetName>
+            <DataSetName>TownsDs</DataSetName>
             <Top>8.78683cm</Top>
             <Left>0.43603cm</Left>
             <Height>1.2cm</Height>
@@ -980,7 +980,7 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>BusinessTypes</DataSetName>
+            <DataSetName>BusinessTypesDs</DataSetName>
             <Top>6.16553cm</Top>
             <Left>0.45014cm</Left>
             <Height>1.2cm</Height>
@@ -999,7 +999,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>N° Devis: </Value>
+                    <Value>N° </Value>
                     <Style>
                       <FontFamily>Times New Roman</FontFamily>
                       <FontSize>12pt</FontSize>
@@ -1007,7 +1007,23 @@
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>= Parameters!RptNumeroDevis.Value</Value>
+                    <Value>=Parameters!RptNumeroTxt.Value</Value>
+                    <Style>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>: </Value>
+                    <Style>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>= Parameters!RptNumero.Value</Value>
                     <Style>
                       <FontFamily>Times New Roman</FontFamily>
                       <FontSize>12pt</FontSize>
@@ -1021,7 +1037,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Date devis: </Value>
+                    <Value>Date </Value>
                     <Style>
                       <FontFamily>Times New Roman</FontFamily>
                       <FontSize>12pt</FontSize>
@@ -1029,7 +1045,23 @@
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>= Parameters!RptDateDevis.Value</Value>
+                    <Value>=Parameters!RptDateTxt.Value</Value>
+                    <Style>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>: </Value>
+                    <Style>
+                      <FontFamily>Times New Roman</FontFamily>
+                      <FontSize>12pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>= Parameters!RptDate.Value</Value>
                     <Style>
                       <FontFamily>Times New Roman</FontFamily>
                       <FontSize>12pt</FontSize>
@@ -1070,7 +1102,7 @@
             <Height>2.16633cm</Height>
             <Width>10.31988cm</Width>
             <ZIndex>6</ZIndex>
-            <ToolTip>=Parameters!RptNumeroDevis.Value</ToolTip>
+            <ToolTip>=Parameters!RptNumero.Value</ToolTip>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1281,7 +1313,7 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="RptDateDevis">
+    <ReportParameter Name="RptDate">
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
@@ -1297,11 +1329,19 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="RptNumeroDevis">
+    <ReportParameter Name="RptNumero">
       <DataType>Integer</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="RptTotalCost">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="RptNumeroTxt">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="RptDateTxt">
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
@@ -1329,7 +1369,7 @@
         <CellDefinition>
           <ColumnIndex>3</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>RptDateDevis</ParameterName>
+          <ParameterName>RptDate</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
@@ -1349,12 +1389,22 @@
         <CellDefinition>
           <ColumnIndex>3</ColumnIndex>
           <RowIndex>1</RowIndex>
-          <ParameterName>RptNumeroDevis</ParameterName>
+          <ParameterName>RptNumero</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>2</RowIndex>
           <ParameterName>RptTotalCost</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>2</RowIndex>
+          <ParameterName>RptNumeroTxt</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>2</RowIndex>
+          <ParameterName>RptDateTxt</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

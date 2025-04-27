@@ -17,6 +17,7 @@ using Root;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using WebApi.Helpers;
 
@@ -92,6 +93,9 @@ namespace WebApi
             {
                 endpoints.MapControllers();
             });
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>

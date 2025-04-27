@@ -5,6 +5,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="RptModels\**" />
+	  <EmbeddedResource Remove="RptModels\**" />
+	  <None Remove="RptModels\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.App" />
 		<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
@@ -18,15 +24,10 @@
 			<AutoGen>True</AutoGen>
 			<DependentUpon>ClientDataSet.xsd</DependentUpon>
 		</Compile>
-		<Compile Update="RptDataSets\Devis\DevisDataSet.Designer.cs">
-		  <DesignTime>True</DesignTime>
-		  <AutoGen>True</AutoGen>
+		<Compile Update="RptDataSets\DevisDataSet.Designer.cs">
 		  <DependentUpon>DevisDataSet.xsd</DependentUpon>
-		</Compile>
-		<Compile Update="RptDataSets\Facture\FactureDataSet.Designer.cs">
 		  <DesignTime>True</DesignTime>
 		  <AutoGen>True</AutoGen>
-		  <DependentUpon>FactureDataSet.xsd</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
@@ -35,18 +36,14 @@
 			<Generator>MSDataSetGenerator</Generator>
 			<LastGenOutput>ClientDataSet.Designer.cs</LastGenOutput>
 		</None>
-		<None Update="RptDataSets\Devis\DevisDataSet.xsd">
-		  <Generator>MSDataSetGenerator</Generator>
+		<None Update="Reports\BillingReport.rdlc">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="RptDataSets\DevisDataSet.xsd">
+		  <SubType>Designer</SubType>
 		  <LastGenOutput>DevisDataSet.Designer.cs</LastGenOutput>
-		</None>
-		<None Update="RptDataSets\Facture\FactureDataSet.xsd">
 		  <Generator>MSDataSetGenerator</Generator>
-		  <LastGenOutput>FactureDataSet.Designer.cs</LastGenOutput>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="RptModels\" />
 	</ItemGroup>
 
 </Project>

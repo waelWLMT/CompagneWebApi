@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace Reporting.RptDataSets.Devis {
+namespace Reporting.RptDataSets {
     
     
     /// <summary>

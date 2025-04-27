@@ -29,5 +29,11 @@
     <Folder Include="Reports\Img\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Reports\BillingReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>

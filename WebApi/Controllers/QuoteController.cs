@@ -20,16 +20,16 @@ namespace WebApi.Controllers
         private readonly IQuoteService _quoteService;
         private readonly ICampaignService _campaignService;
         private readonly IBillService _billService;
-        private readonly IReportService _reportService;
+        private readonly IBillingReportService _devisRepotingService;
         private readonly IMapper _mapper;
 
-        public QuoteController(IReportService reportService, IQuoteService quoteService, ICampaignService campaignService, IBillService billService, IMapper mapper)
+        public QuoteController(IBillingReportService devisRepotingService, IQuoteService quoteService, ICampaignService campaignService, IBillService billService, IMapper mapper)
         {
             this._quoteService = quoteService;
             this._campaignService = campaignService;
             this._billService = billService;
             this._mapper = mapper;
-            this._reportService = reportService;
+            this._devisRepotingService = devisRepotingService;
         }
 
         [HttpGet]
@@ -68,13 +68,9 @@ namespace WebApi.Controllers
         [Route("getDevisCampaigneReport")]
         public IActionResult GetDevisCampaigneReport(int devisId)
         {
-            var file = _reportService.GenerateCampaignDevisReport(devisId);
-            if (file == null)
-                return null;
-
-            Stream stream = new MemoryStream(file);
-            return File(stream, "application/pdf", "CampaignDevisRpt.pdf");
+            var file = _devisRepotingService.GenerateBillingReport(devisId, false);
+            return File(new MemoryStream(file), "application/pdf", "CampaignDevisRpt.pdf");
         }
-
+      
     }
 }
