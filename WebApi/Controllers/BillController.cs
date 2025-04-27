@@ -59,7 +59,18 @@ namespace WebApi.Controllers
         {
             var file = _billingReportService.GenerateBillingReport(billId, true);
             return File(new MemoryStream(file), "application/pdf", "CampaignFactureRpt.pdf");
-        }        
-    
+        }
+        
+        [HttpGet]
+        [Route("getFactureReportByCampagnId")]
+        public IActionResult GetFactureReportByCampagnId(int campaignId)
+        {
+            var file = _billingReportService.GenerateBillingReportByCampagnId(campaignId, true);
+            return File(new MemoryStream(file), "application/pdf", "CampaignFactureRpt.pdf");
+        }
+
+
+
+
     }
 }

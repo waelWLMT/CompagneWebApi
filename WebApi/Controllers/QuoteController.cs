@@ -20,16 +20,16 @@ namespace WebApi.Controllers
         private readonly IQuoteService _quoteService;
         private readonly ICampaignService _campaignService;
         private readonly IBillService _billService;
-        private readonly IBillingReportService _devisRepotingService;
+        private readonly IBillingReportService _billingReportService;
         private readonly IMapper _mapper;
 
-        public QuoteController(IBillingReportService devisRepotingService, IQuoteService quoteService, ICampaignService campaignService, IBillService billService, IMapper mapper)
+        public QuoteController(IBillingReportService billingReportService, IQuoteService quoteService, ICampaignService campaignService, IBillService billService, IMapper mapper)
         {
             this._quoteService = quoteService;
             this._campaignService = campaignService;
             this._billService = billService;
             this._mapper = mapper;
-            this._devisRepotingService = devisRepotingService;
+            this._billingReportService = billingReportService;
         }
 
         [HttpGet]
@@ -65,10 +65,19 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("getDevisCampaigneReportByCampaignId")]
+        public IActionResult GetDevisCampaigneReportByCampaignId(int campaignId)
+        {
+            var file = _billingReportService.GenerateBillingReportByCampagnId(campaignId, false);
+            return File(new MemoryStream(file), "application/pdf", "CampaignDevisRpt.pdf");
+        }
+
+
+        [HttpGet]
         [Route("getDevisCampaigneReport")]
         public IActionResult GetDevisCampaigneReport(int devisId)
         {
-            var file = _devisRepotingService.GenerateBillingReport(devisId, false);
+            var file = _billingReportService.GenerateBillingReport(devisId, false);
             return File(new MemoryStream(file), "application/pdf", "CampaignDevisRpt.pdf");
         }
       

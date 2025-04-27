@@ -166,6 +166,20 @@ namespace BL.Services.Impl
             // return byte[]
             return file;
         }
+
+        public byte[] GenerateBillingReportByCampagnId(int campaignId, bool isBill)
+        {
+            if (isBill)
+            {
+                var factureId = _billRepository.GetByCampaignId(campaignId).Id;
+                return GenerateBillingReport(factureId, true);
+            }
+
+            var devisId = _quoteRepository.GetByCampaignId(campaignId).Id;
+            return GenerateBillingReport(devisId, false);
+        }
+
+
         #endregion
 
     }

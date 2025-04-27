@@ -11,5 +11,7 @@ namespace BL.Services
         byte[] GenerateCampaignDevisReport(int devisId);
 
         byte[] GenerateBillingReport(int id, bool isBill);
+
+        byte[] GenerateBillingReportByCampagnId(int campaignId, bool isBill);
     }
 }
