@@ -146,11 +146,17 @@ namespace BL.Services.Impl
             var ds = getDevisDataSet(campaign, quote);
             var reportParams = getReportParameters(campaign, quote, isBill);
 
-            var reportPath = Path.Combine(Directory.GetCurrentDirectory(), "Reports", "BillingReport.rdlc");
+            var reportPath = new StringBuilder();
+            
+            if(isBill)
+                reportPath.Append(Path.Combine(Directory.GetCurrentDirectory(), "Reports","bill", "BillingReport.rdlc"));
+            else
+                reportPath.Append(Path.Combine(Directory.GetCurrentDirectory(), "Reports","quote", "QuoteReport.rdlc"));
+
 
             byte[] file = null;
 
-            var localReport = new LocalReport(reportPath);
+            var localReport = new LocalReport(reportPath.ToString());
 
             // set report dataset
             localReport.AddDataSource("BusinessTypesDs", ds.DevisBusinessType);

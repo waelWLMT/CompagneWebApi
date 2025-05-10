@@ -35,24 +35,18 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /*
-            services.AddAuthentication(
-            CertificateAuthenticationDefaults.AuthenticationScheme)
-            .AddCertificate();
-            */
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                    builder =>
-                    {
-                        builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-
-                    });
-            });
+            var allowedOrigins = Configuration.GetSection("AppSettings:AllowedOrigins").Get<string[]>();           
+            services.AddCors(feature =>
+                feature.AddPolicy(
+                    "CorsPolicy",
+                    apiPolicy => apiPolicy
+                                    //.AllowAnyOrigin()
+                                    .WithOrigins(allowedOrigins)
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod()
+                                    .SetIsOriginAllowed(host => true)
+                                    .AllowCredentials()
+                                ));
 
             services.AddHttpClient();            
 
@@ -76,16 +70,22 @@ namespace WebApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {                
-                //app.UseDeveloperExceptionPage();
-            }
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test1 Api v1");
+                });
 
-            app.UseAuthentication();
-            app.UseCors("AllowAll");            
+                app.UseDeveloperExceptionPage();
+            }            
+                                   
             //app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
+            app.UseCors("CorsPolicy");            
 
+            app.UseAuthentication();
+            app.UseAuthorization();
             // custom jwt auth middleware
             app.UseMiddleware<JwtMiddleware>();
 
@@ -96,12 +96,7 @@ namespace WebApi
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Test1 Api v1");
-            });
+            
 
 
         }

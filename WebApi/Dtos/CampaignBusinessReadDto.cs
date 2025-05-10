@@ -14,6 +14,7 @@ namespace WebApi.Dtos
         public int BusinessTypeId { get; set; }
         public BusinessState State { get; set; }
         public int BusinessTownId { get; set; }
+        public BusinessTypeReadDto BusinessType { get; set; }
         public Place Place { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace BL.Services
         double CountBusinessTypeCost(ICollection<Product> products);
         double CountCampaignTotalCost(Campaign campaign);
         Campaign UpdateCampaignProduct(int campaignId, int productTypeId, int finalNbrProductPerBusiness, float finalPrice);
-        Campaign DeleteCampaignBusinessType(int campaignId, int BusinessTypeMapCode);
+        Campaign DeleteCampaignBusinessType(int campaignId, int BusinessTypeId);
         Campaign DeleteCampaignProduct(int campaignId, int productTypeId);
         Campaign GetCampaignByIdFullData(int idCampaign);
         Campaign CloseCampaign(int campaignId, int userId);

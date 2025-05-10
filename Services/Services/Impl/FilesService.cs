@@ -19,13 +19,13 @@ namespace BL.Services.Impl
 
         public string CreateCampaignBusinessFilesDirectoryIfNotExist(int campaignId, int businessId)
         {
-            var parentDirectory = _configuration.GetSection("CampaignsFolder").Value;
-            var suffixFolderName = _configuration.GetSection("SuffixCampaignPhotosFolderName").Value.ToString();
+            var parentDirectory = _configuration.GetSection("AppSettings:CampagneFolderSettings:CampaignsFolder").Value;
+            var suffixFolderName = _configuration.GetSection("AppSettings:CampagneFolderSettings:SuffixCampaignPhotosFolderName").Value.ToString();
             
             
             var folderName = campaignId + suffixFolderName;
 
-            var businessFolderName = businessId + _configuration.GetSection("SuffixbusinessFolderName").Value.ToString();
+            var businessFolderName = businessId + _configuration.GetSection("AppSettings:CampagneFolderSettings:SuffixbusinessFolderName").Value.ToString();
             var folderPath = Path.Combine(parentDirectory, folderName);
 
             // Determine whether the campaign directory exists.

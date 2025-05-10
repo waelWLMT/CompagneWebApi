@@ -20,28 +20,25 @@ using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CampaignController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ICampaignService _campaignService;
-        private readonly IBillService _billService;
         public IFilesService _filesService { get; }
         private readonly IPhotoService _photoService;
-        private readonly IPlaceService _placeService;
+        
 
-        public CampaignController(ICampaignService campaignService, IMapper mapper, 
-            IBillService billService, IFilesService filesService, 
-            IPhotoService photoService, IPlaceService placeService)
+        public CampaignController(ICampaignService campaignService, IMapper mapper,
+            IFilesService filesService, IPhotoService photoService,
+            IPlaceService placeService)
         {
             _mapper = mapper;
             _campaignService = campaignService;
-            _billService = billService;
             _filesService = filesService;
-            _photoService = photoService;
-            _placeService = placeService;
+            _photoService = photoService;            
         }
 
         #region Campaign Managment
@@ -133,7 +130,7 @@ namespace WebApi.Controllers
         {
             var detailedTown = _campaignService.GetListDetailedCampaignTown(campaignId, townId);
             var result = _mapper.Map<DetailsCampaignTownReadDto>(detailedTown);
-            
+
             return result;
         }
 
@@ -280,27 +277,6 @@ namespace WebApi.Controllers
         }
 
         #endregion
-
-        [HttpPost]
-        [Route("GetPlaceListByPostalCodesAndType")]
-        public async Task<List<Place>> GetPlaceListByPostalCodesAndType(SearchPlacesDto searchPlacesCreteria)
-        {
-            var places = new List<Place>();
-            var postalCodes = "75008,45100".Split(",").ToList();
-            var businessTypeIds = "1,7,8";
-            var tasks = new List<Task<List<Place>>>();
-
-            foreach (var postalCode in postalCodes)            
-                tasks.Add(_placeService.GetPlacesList(postalCode, businessTypeIds));
-
-            var results = await Task.WhenAll(tasks);
-
-            foreach (var result in results)            
-                places.AddRange(result);                
-            
-            return places;
-
-        }
 
     }
 }

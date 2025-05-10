@@ -39,6 +39,9 @@
 		<None Update="Reports\BillingReport.rdlc">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Reports\QuoteReport.rdlc">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="RptDataSets\DevisDataSet.xsd">
 		  <SubType>Designer</SubType>
 		  <LastGenOutput>DevisDataSet.Designer.cs</LastGenOutput>

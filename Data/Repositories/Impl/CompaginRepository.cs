@@ -90,7 +90,8 @@ namespace Data.Repositories.Impl
                 .Include(x => x.Customer)
                 .Include(x => x.Region)
                 .Include(x => x.CampaignBusinessTypes)
-                .Include(x => x.CampaignBusinesses.OrderByDescending(x=> x.LastDateModif)).ThenInclude(x=> x.Place)
+                .Include(x => x.CampaignBusinesses).ThenInclude(x=> x.BusinessType)
+                .Include(x => x.CampaignBusinesses.OrderByDescending(x=> x.LastDateModif)).ThenInclude(x=> x.Place)                
                 .Include(x => x.CampaignTowns)
                 .Include(x => x.CampaignProducts)
                 .Include(x => x.CampaignProducts).ThenInclude(pt => pt.ProductType);

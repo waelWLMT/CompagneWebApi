@@ -30,7 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Reports\BillingReport.rdlc">
+    <None Update="Reports\bill\BillingReport.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\quote\QuoteReport.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -22,7 +22,7 @@ namespace BL.Services.Impl
         private readonly IProductTypeRepository _productTypeRepo;
         private readonly ICustomerRepository _customerRepo;
         private readonly IPlacesRepository _placesRepository;
-        private AppSettings _appSettings;
+        private readonly AppSettings _appSettings;
         public CampaignService(
                 IOptions<AppSettings> options,
                 ICampaignRepository campaignReporepo, IRegionRepository regionRepo,
@@ -69,7 +69,7 @@ namespace BL.Services.Impl
 
             if (campaign != null)
             {
-                var town = campaign.CampaignTowns.Where(x => x.Id == townId).FirstOrDefault();
+                var town = campaign.CampaignTowns.FirstOrDefault(x => x.Id == townId);
                 if (town != null)
                 {
                     // remove town
@@ -90,8 +90,6 @@ namespace BL.Services.Impl
 
             return campaign;
         }
-
-
         public DetailsCampaignTown GetListDetailedCampaignTown(int campaignId, int townId)
         {
             var campaign = GetCampaignByIdFullData(campaignId);
@@ -100,7 +98,7 @@ namespace BL.Services.Impl
             {
                 var town = campaign.CampaignTowns.FirstOrDefault(x => x.Id == townId);
                 var businesses = campaign.CampaignBusinesses.Where(x => x.BusinessTownId == town.Id).ToList();
-                var nbrBusinesses = businesses.Count();
+                var nbrBusinesses = businesses.Count;
                 var townCost = CountBusinessTypeCost(campaign.CampaignProducts) * nbrBusinesses;
                 townCost = townCost * campaign.PenetraionRate / 100;
 
@@ -119,7 +117,7 @@ namespace BL.Services.Impl
             return null;
 
 
-        }           
+        }
 
         // Get list of detailed campaign towns
         public List<DetailsCampaignTown> GetListDetailsCampaignTowns(int campaignId)
@@ -134,7 +132,7 @@ namespace BL.Services.Impl
                 foreach (var town in towns)
                 {
                     var businesses = campaign.CampaignBusinesses.Where(x => x.BusinessTownId == town.Id).ToList();
-                    var nbrBusinesses = businesses.Count();
+                    var nbrBusinesses = businesses.Count;
                     var townCost = CountBusinessTypeCost(campaign.CampaignProducts) * nbrBusinesses;
                     townCost = townCost * campaign.PenetraionRate / 100;
 
@@ -198,17 +196,15 @@ namespace BL.Services.Impl
         // Count Campaign TotalCost
         public double CountCampaignTotalCost(Campaign campaign)
         {
-
             var businessTypeCost = CountBusinessTypeCost(campaign.CampaignProducts);
-            var nbrCampaignBusiness = campaign.CampaignBusinesses.Count() * campaign.PenetraionRate / 100;
+            var nbrCampaignBusiness = campaign.CampaignBusinesses.Count * campaign.PenetraionRate / 100;
 
             return nbrCampaignBusiness * businessTypeCost;
-
         }
 
         #endregion
 
-        #region Campaign Businesses and BusinessTypes  Management
+        #region Campaign Businesses and BusinessTypes Management
         public async Task<Campaign> AddCampaignBusinessType(int campaignId, int businessTypeId)
         {
             var campaign = GetCampaignByIdFullData(campaignId);
@@ -223,10 +219,10 @@ namespace BL.Services.Impl
                     var towns = campaign.CampaignTowns.ToList();
                     var taskMap = new Dictionary<string, Task<List<Place>>>();
 
-                    foreach (var town in towns)
+                    foreach (var postalCode in towns.Select(x=> x.PostalCode))
                     {
-                        var task = _placesRepository.GetPlacesFromOverPassApi(town.PostalCode, new HashSet<BusinessType> { businessType });
-                        taskMap[town.PostalCode] = task;
+                        var task = _placesRepository.GetPlacesFromOverPassApi(postalCode, new HashSet<BusinessType> { businessType });
+                        taskMap[postalCode] = task;
                     }
 
                     await Task.WhenAll(taskMap.Values);
@@ -238,7 +234,7 @@ namespace BL.Services.Impl
 
                         foreach (var place in result)
                         {
-                            var town = towns.FirstOrDefault(x => x.PostalCode == postalCode);
+                            var town = towns.Find(x => x.PostalCode == postalCode);
 
                             if (!string.IsNullOrEmpty(place.TagKeyCode) && !string.IsNullOrEmpty(place.TagValueCode))
                                 campaign.CampaignBusinesses.Add(buildBusinessCampaign(campaign, place, new List<BusinessType> { businessType }, town));
@@ -312,7 +308,7 @@ namespace BL.Services.Impl
             place.PlaceAdresse.TownName = town.City;
             place.PlaceAdresse.PostalCode = town.PostalCode;
 
-            campaignBusiness.BusinessType = businessTypes.FirstOrDefault(x => x.TagKeyCode == place.TagKeyCode && x.TagValueCode == place.TagValueCode);
+            campaignBusiness.BusinessType = businessTypes.Find(x => x.TagKeyCode == place.TagKeyCode && x.TagValueCode == place.TagValueCode);
 
             campaignBusiness.Campaign = campaign;
             campaignBusiness.BusinessTypeId = campaignBusiness.BusinessType.Id;
@@ -326,18 +322,15 @@ namespace BL.Services.Impl
         }
         public async Task<List<CampaignBusiness>> GetTownBusinesses(Campaign campaign, List<Town> towns, List<BusinessType> businessTypes)
         {
-
-            #region new code
-
             var townBusinesses = new HashSet<CampaignBusiness>();
             var taskMap = new Dictionary<string, Task<List<Place>>>();
 
             try
             {
-                foreach (var town in towns)
+                foreach (var postalCode in towns.Select(x=> x.PostalCode))
                 {
-                    var task = _placesRepository.GetPlacesFromOverPassApi(town.PostalCode, businessTypes.ToHashSet());
-                    taskMap[town.PostalCode] = task;
+                    var task = _placesRepository.GetPlacesFromOverPassApi(postalCode, businessTypes.ToHashSet());
+                    taskMap[postalCode] = task;
                 }
 
                 await Task.WhenAll(taskMap.Values);
@@ -349,7 +342,7 @@ namespace BL.Services.Impl
 
                     foreach (var place in result)
                     {
-                        var town = towns.FirstOrDefault(x => x.PostalCode == postalCode);
+                        var town = towns.Find(x => x.PostalCode == postalCode);
 
                         if (!string.IsNullOrEmpty(place.TagKeyCode) && !string.IsNullOrEmpty(place.TagValueCode))
                             townBusinesses.Add(buildBusinessCampaign(campaign, place, businessTypes, town));
@@ -365,54 +358,7 @@ namespace BL.Services.Impl
                 throw ex;
             }
 
-
-
-            #endregion
-
-            #region old code implementation
-
-            //var TownBusinesses = new HashSet<CampaignBusiness>();
-            //var postalCodes = towns.Select(x => x.PostalCode).ToList();
-
-            //foreach (var businessType in businessTypes)
-            //{
-
-            //    // à revoir  içi possibilité d'eneleve la boucle for 
-            //    // il faut verifier s'il y a un moyen de passer une liste des type de place en parametre
-            //    // si c'est pas possible y a pas de souci on va regler ça dans la partie front ( creation de la campagne 1 seul type choise et aprés on rajoute un par un)
-            //    // si non on peut envoye plusieur requete simultanement et attend qu'elle soit toutes axecuter en utilisant WhenAll() tasks                
-            //    var places = await _placesRepository.GetPlacesFromOverPassApi(postalCodes, businessType.TagKeyCode, businessType.TagValueCode);
-
-            //    foreach (var place in places)
-            //    {
-            //        var town = towns.FirstOrDefault(x => x.PostalCode == place.PlaceAdresse.PostalCode);                        
-
-            //        var campaignBusiness = new CampaignBusiness()
-            //        {
-            //            BusinessType = businessType,
-            //            Campaign = campaign,
-            //            BusinessTypeId = businessType.Id,
-            //            CompagnId = campaign.Id,
-            //            Place = place,
-            //            Photos = new HashSet<Photo>(),
-            //            State = BusinessState.A_Faire,
-            //            BusinessTownId = town != null ? town.Id : 0
-            //        };
-
-            //        TownBusinesses.Add(campaignBusiness);
-            //    }
-
-
-            //}
-
-            //return TownBusinesses.ToList();
-
-
-            #endregion
-
-
         }
-
         #endregion
 
         #region Campaign Products Management
@@ -493,7 +439,7 @@ namespace BL.Services.Impl
         {
 
             var campaign = this.GetCampaignByIdFullData(campaignId);
-            var product = campaign.CampaignProducts.FirstOrDefault(x => x.ProductTypeId == productTypeId);
+            var product = campaign?.CampaignProducts.FirstOrDefault(x => x.ProductTypeId == productTypeId);
 
             if (campaign != null && product != null)
             {
@@ -546,8 +492,7 @@ namespace BL.Services.Impl
             }
             catch (Exception ex)
             {
-                RollBack();
-                var msg = ex.Message;
+                RollBack();                
                 return -1;
             }
 
@@ -623,7 +568,6 @@ namespace BL.Services.Impl
             return campaign;
         }
 
-
         // this Method updates campaign state to Cloturée
         public Campaign CloseCampaign(int campaignId, int userId)
         {
@@ -651,14 +595,18 @@ namespace BL.Services.Impl
 
             if (campaign != null)
             {
-                var business = campaign.CampaignBusinesses.Where(x => x.CampaignBusinessId == campaignBusinessId).FirstOrDefault();
-                business.State = (BusinessState)newStateId;
-                business.UserModifId = userModifId;
-                business.LastDateModif = DateTime.Now;
+                var business = campaign.CampaignBusinesses.FirstOrDefault(x => x.CampaignBusinessId == campaignBusinessId);
+                
+                if (business != null)
+                {
+                    business.State = (BusinessState)newStateId;
+                    business.UserModifId = userModifId;
+                    business.LastDateModif = DateTime.Now;
+                    Commit();
+                    return business;
+                }
 
-                Commit();
-
-                return business;
+                
             }
 
             return null;
@@ -666,6 +614,8 @@ namespace BL.Services.Impl
         }
 
         #endregion
+
+
 
     }
 }

@@ -18,9 +18,8 @@ namespace Core.Models
         [NotMapped]
         public Address PlaceAdresse { get; set; }
         public string TagKeyCode { get; set; }
-        public string TagValueCode { get; set; }
+        public string TagValueCode { get; set; }        
 
-        // business Types of specific place
-        //public List<string> PlaceTypes { get; set; }
+        
     }
 }

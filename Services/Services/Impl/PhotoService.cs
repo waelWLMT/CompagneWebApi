@@ -21,8 +21,8 @@ namespace BL.Services.Impl
 
         public string GetFilesFolder(int campaignId, int businessId)
         {
-            var campaignFolderName = campaignId + _configuration.GetSection("SuffixCampaignPhotosFolderName").Value.ToString();
-            var businessFolderName = businessId + _configuration.GetSection("SuffixbusinessFolderName").Value.ToString();
+            var campaignFolderName = campaignId + _configuration.GetSection("AppSettings:CampagneFolderSettings:SuffixCampaignPhotosFolderName").Value.ToString();
+            var businessFolderName = businessId + _configuration.GetSection("AppSettings:CampagneFolderSettings:SuffixbusinessFolderName").Value.ToString();
 
             var filesFolderName = campaignFolderName + "/" + businessFolderName + "/";
 
